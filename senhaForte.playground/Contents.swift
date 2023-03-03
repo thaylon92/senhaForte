@@ -5,19 +5,25 @@ import Foundation
 func checkPassword(_ password: String) -> Bool {
     // vrifica se possui pelo menos uma letra maisucla
     
-    let capitalLetterRegEx  = ".*[A-Z]+.*"
-    let texttest = NSPredicate(format:"SELF MATCHES %@", capitalLetterRegEx)
-    guard texttest.evaluate(with: password)  else { return false }
+    var capitalLetter  = CharacterSet()
+    capitalLetter.insert(charactersIn: "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,Y,X,Z")
+    let texttest = password.rangeOfCharacter(from: capitalLetter) != nil
+    guard texttest == true  else { return false }
     
     // verifica se inicia com uma letra maiuscula
     
-    guard texttest.evaluate(with: password.prefix(1)) else { return false }
+    guard let firstLetter = password.first else {return false}
+    if firstLetter.isUppercase == true {
+    } else {
+        return false
+    }
     
     // verifica se possui pelo menos uma letra minuscula
     
-    let lowerLetterRegEx  = ".*[a-z]+.*"
-    let texttest0 = NSPredicate(format:"SELF MATCHES %@", lowerLetterRegEx)
-    guard texttest0.evaluate(with: password) else { return false }
+    var lowerLetter  = CharacterSet()
+    lowerLetter.insert(charactersIn: "a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,y,x,z")
+    let texttest0 = password.rangeOfCharacter(from: lowerLetter) != nil
+    guard texttest0 == true else { return false }
     
     // verifica sem possui caracter especial
     
@@ -38,6 +44,7 @@ func checkPassword(_ password: String) -> Bool {
     let  numbers = Array(password)
     var indices: [Int] = []
     
+    
     for valor in numbers {
         if let n = Int(String(valor))  {
             indices.append(n)
@@ -46,30 +53,32 @@ func checkPassword(_ password: String) -> Bool {
         }
     }
     
-    var anterior = -1
-    var isNotIqual = false
-    var verifica: [Bool] = []
-    
-    for x in indices {
-        if anterior == -1 {
-            anterior = x
-        } else {
-            if x == anterior + 1 {
-                isNotIqual = true
+    if indices.count >= 3 {
+        var anterior = -1
+        var isNotIqual = true
+        var verifica: [Bool] = []
+        
+        for x in indices {
+            if anterior == -1 {
+                anterior = x
             } else {
-                isNotIqual = false
-            }
-            if isNotIqual == true{
-                verifica.append(true)
-            } else {
-                verifica.append(false)
+                if x == anterior + 1 {
+                    isNotIqual = true
+                } else {
+                    isNotIqual = false
+                }
+                if isNotIqual == true{
+                    verifica.append(true)
+                } else {
+                    verifica.append(false)
+                }
+                anterior = x
             }
         }
-    }
-    
-    if verifica != [true] {
-        return false
-    } else {
+        
+        if !verifica.contains(false)  {
+            return false
+        }
         
     }
     
