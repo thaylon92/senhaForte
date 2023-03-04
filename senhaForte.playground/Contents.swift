@@ -67,19 +67,18 @@ func checkPassword(_ password: String) -> Bool {
                 } else {
                     isNotIqual = false
                 }
-                if isNotIqual == true{
+                if isNotIqual{
                     verifica.append(true)
-                } else {
-                    verifica.append(false)
+                } else if verifica.count < 2 {
+                    verifica.removeAll()
                 }
                 anterior = x
             }
+            if verifica.count >= 2  {
+                return false
+            }
+            
         }
-        
-        if !verifica.contains(false)  {
-            return false
-        }
-        
     }
     
     // verificar se tem de 5 a 15 caracter
@@ -93,8 +92,7 @@ func checkPassword(_ password: String) -> Bool {
 }
 
 
-
-let pass1 = "Teste123"
+let pass1 = "Teste11223"
 if checkPassword(pass1) {
     print("Senha forte")
 } else {
